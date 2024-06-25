@@ -25,30 +25,8 @@ const UsuariosView = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const buscarUsuarios = async () => {
-      if (!centroId) {
-        console.log('centroId não definido');
-        return;
-      }
-      console.log(`Buscando usuários para centroId: ${centroId}`);
-      try {
-        const response = await axios.get(`https://backend-teste-q43r.onrender.com/users/listarUsers/${centroId}`);
-        if (response.data && Array.isArray(response.data)) {
-          console.log(response.data);
-          setUsuarios(response.data);
-        } else {
-          console.error('Resposta da API vazia ou formato de dados incorreto');
-        }
-      } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
-        setError(error.message);
-      }
-    };
+ 
   
-    buscarUsuarios();
-  }, [centroId]);
-   // Adiciona centroId como dependência para garantir que a busca ocorra quando centroId for definido
 
   const formatarData = (data) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };

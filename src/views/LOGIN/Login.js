@@ -5,27 +5,20 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch('https://backend-teste-q43r.onrender.com/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
+  const handleLogin = () => {
+    // Static credentials
+    const staticEmail = '1';
+    const staticPassword = '1';
 
-      const data = await response.json();
+    if (email === '' || password === '') {
+      alert('Por favor, preencha todos os campos!');
+      return;
+    }
 
-      if (response.ok) {
-        sessionStorage.setItem('centro_id', data.centro_id);
-        onLogin();
-      } else {
-        alert(data.error || 'Credenciais inválidas!');
-      }
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      alert('Erro ao fazer login, tente novamente mais tarde');
+    if (email === staticEmail && password === staticPassword) {
+      onLogin();
+    } else {
+      alert('Credenciais inválidas!');
     }
   };
 

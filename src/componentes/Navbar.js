@@ -85,7 +85,7 @@ const Navbar = () => {
               <ul className="sub-menu">
                 <li>
                   <Link
-                    to="#"
+                    to="album_partilha"
                     className={selectedMenu === 'Desporto' ? 'active' : ''}
                     onClick={() => setSelectedMenu('Desporto')}
                   >

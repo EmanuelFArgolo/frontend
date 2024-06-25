@@ -1,0 +1,461 @@
+.div_princ {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 250px);
+  background-color: #156fca;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: auto;
+  flex: 1;
+  min-height: calc(100vh - 90px);
+  margin-left: 250px;
+  margin-top: 60px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.btn-criar {
+  padding: 10px 20px;
+  background-color: white;
+  color: #156fca;
+  border: 2px solid #156fca;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-criar:hover {
+  background-color: #e0f7fa;
+}
+
+.summary-cards {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-right: 20px;
+}
+
+.card:last-child {
+  margin-right: 0;
+}
+
+.card-title {
+  font-size: 16px;
+  color: #718EBF;
+  margin-bottom: 10px;
+}
+
+.card-count {
+  font-size: 24px;
+  color: #156fca;
+  font-weight: bold;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 20px;
+}
+.search-icon {
+  margin-right: 10px;
+  font-size: 20px; /* Ajuste o tamanho conforme necessário */
+  color: #718EBF; /* Cor opcional */
+}
+
+.search-bar input {
+  width: 20%;
+  border-radius: 100px;
+  padding: 15px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+.users-view {
+  padding: 0px;
+  background-color: #f9f9f9;
+  margin-left: 0px;
+  margin-right: 50px;
+  border-radius: 10px;
+}
+
+.button-container .create-user-button:last-child {
+  margin-left: auto;
+}
+
+.users-table {
+  color: #718EBF;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  text-align: left;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.users-table th, .users-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.users-table th {
+  background-color: #f4f4f4;
+}
+
+.users-table td {
+  color: black;
+}
+
+.user-info {
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.status {
+  color: green;
+  font-weight: bold;
+}
+
+.status.active {
+  color: green;
+}
+
+.edit-btn, .btn-info, .btn-edit, .btn-delete {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.edit-btn:hover, .btn-info:hover, .btn-edit:hover, .btn-delete:hover {
+  background-color: #0056b3;
+}
+
+.more-info {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+}
+
+.create-user-form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.create-user-form h2 {
+  margin-bottom: 20px;
+}
+
+.create-user-form form {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.form-left, .form-right {
+  flex: 1;
+}
+
+.form-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.create-user-form label {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-user-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-user-form button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: auto;
+  align-self: flex-start;
+}
+
+.create-user-form button:hover {
+  background-color: #0056b3;
+}
+
+.image-label {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+/* ... seus estilos existentes ... */
+
+.info-icon,
+.ban-icon,
+.edit-icon,
+.delete-icon {
+  font-size: 18px; /* Ajuste o tamanho conforme necessário */
+  margin-right: 5px; /* Espaçamento entre os ícones */
+  cursor: pointer;  /* Cursor de mãozinha ao passar o mouse */
+}
+
+/* Estilos específicos para cada ícone (opcional) */
+.info-icon {
+  color: #007bff; /* Azul */
+}
+
+.ban-icon {
+  color: #dc3545; /* Vermelho */
+}
+
+.edit-icon {
+  color: #28a745; /* Verde */
+}
+
+.delete-icon {
+  color: #dc3545; /* Vermelho */
+}
+
+/* Estilos para o modal */
+.modal {
+  /* ... outros estilos do modal ... */
+  position: fixed; /* Garante que o modal fique fixo na tela */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centraliza horizontal e verticalmente */
+  display: flex; /* Ativa o Flexbox */
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+  background-color: white;
+  width: 33%; 
+  max-width: 400px;
+  border-radius: 12px; /* Bordas mais arredondadas */
+  padding: 30px;      /* Mais espaçamento interno */
+  height: 33%;
+  min-height: 400px;
+}
+
+
+
+/* Estilos para o conteúdo do modal */
+.modal-content {
+  text-align: center; /* Alinhamento do texto ao centro */
+}
+
+.modal-icon {
+  margin-bottom: 25px; /* Espaçamento abaixo do ícone */
+}
+.modal-icon svg { /* Estilizando o ícone SVG */
+  width: 60px;
+  height: 60px;
+  fill: #dc3545; /* Cor vermelha */
+}
+
+
+.modal-content h2 {
+  font-size: 28px;    /* Tamanho do título */
+  font-weight: bold;
+
+  margin-bottom: 10px; /* Espaçamento abaixo do título */
+}
+
+.modal-content p {
+  font-size: 18px;    /* Tamanho do parágrafo */
+  margin-bottom: 30px; /* Espaçamento abaixo do parágrafo */
+}
+
+/* Estilos para os botões */
+.modal-buttons button {
+  padding: 10px 20px;  /* Espaçamento interno dos botões */
+  border: none;        /* Sem borda */
+  border-radius: 5px;  /* Cantos arredondados */
+  cursor: pointer;     /* Cursor de mãozinha */
+  font-size: 16px;     /* Tamanho da fonte */
+  margin: 0 5px;       /* Espaçamento entre os botões */
+  font-weight: bold; /* Texto em negrito */
+
+}
+
+.modal-buttons button:first-child {
+  background-color: #dc3545; /* Fundo vermelho para o botão "Eliminar" */
+  color: #fff; /* Borda vermelha para o botão "Cancelar" */
+  border-radius: 100px;
+}
+
+.modal-buttons button:last-child {
+    text-decoration: underline;
+    background-color: white;
+}
+.modal-buttons {
+  margin-top: 50px;
+  display: flex;    /* Ativa o Flexbox */
+  flex-direction: column; /* Empilha os botões na vertical */
+  gap: 10px;         /* Espaçamento entre os botões */
+  align-items: center; /* Centraliza os botões horizontalmente */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+  /* ... outros estilos ... */
+}
+
+/* Estilos para o badge de status */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  min-width: 80px; /* Ajuste conforme necessário */
+}
+
+.status-active {
+  background-color: #4CAF50; /* Cor verde para 'active' */
+}
+
+.status-inactive {
+  background-color: #FF0000; /* Cor vermelha para 'inactive' */
+}
+
+/* modal dos details */
+/* Estilos para o modal de detalhes */
+.modal-detalhes {
+  width: 80%;
+  max-width: 800px;
+  margin-top: 50px;
+  margin-left: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.overlay-detalhes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-detalhes-content {
+  display: flex;
+  max-height: 80vh; /* Define a altura máxima do modal */
+
+  flex-direction: column;
+  align-items: center;
+}
+
+.galeria {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  
+}
+
+.publicacao-detalhes-imagem {
+  width: auto;
+  max-width: 180px;
+  min-height: 180px;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.descricao {
+  text-align: left;
+  width: 100%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.descricao p {
+  margin: 5px 0;
+}
+
+.descricao strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.modal-detalhes-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-detalhes-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-detalhes-buttons button:hover {
+  background-color: #0056b3;
+}

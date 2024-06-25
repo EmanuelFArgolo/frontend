@@ -8,7 +8,7 @@ const CentrosView = () => {
   useEffect(() => {
     const buscarCentros = async () => {
       try {
-        const response = await axios.get('https://backend-teste-q43r.onrender.com/centros/listarCentros');
+        const response = await axios.get('http://localhost:3000/centros');
         if (response.data && Array.isArray(response.data)) {
           console.log(response.data);
           setCentros(response.data);
