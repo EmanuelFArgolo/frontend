@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import './AlbumPartilha.css'; 
-import CreatePublicationButton from '../../componentes/botao_view_publicacoes/criar_publicacao';
+import './AlbumPartilha.css';
+import FilterOptions from './filteroptions/FilterOptions';
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaPen, FaTrashAlt, FaInfoCircle, FaBan } from 'react-icons/fa';
 import Modal from 'react-modal';
+import CriarAlbum from './CriarAlbum';
+import PublicacaoDetalhes from './PublicacaoDetalhes';
+import DeleteModal from './modal/DeleteModal';
+
+Modal.setAppElement('#root');
 
 const AlbumPartilha = () => {
   const [publicacoes, setPublicacoes] = useState([
@@ -12,9 +17,9 @@ const AlbumPartilha = () => {
       nome: 'Estado Municipal do Fontelo',
       topico: 'Futebol',
       dataCriacao: '2024-06-12T10:00:00Z',
-      status: 'inactive',
+      status: 'hidden',
       imagens: [
-        'https://via.placeholder.com/300.png', 
+        'https://via.placeholder.com/300.png',
         'https://via.placeholder.com/300x200.png',
       ],
       descricao: 'Descrição do evento 1',
@@ -23,19 +28,13 @@ const AlbumPartilha = () => {
     },
     {
       id: 2,
-      nome: 'Estádio dos trabelos',
+      nome: 'Estádio dos Trabelos',
       topico: 'Futebol',
       dataCriacao: '2024-06-12T12:30:00Z',
       status: 'active',
       imagens: [
-        'https://eventmundi.com.br/wp-content/uploads/2023/06/Dunny_an_aerial_view_of_the_maracan_stadium_at_sunrise_with_chr_1e100a80-e25f-4049-82fd-a5dff1bb2357.jpg'
-        ,
+        'https://eventmundi.com.br/wp-content/uploads/2023/06/Dunny_an_aerial_view_of_the_maracan_stadium_at_sunrise_with_chr_1e100a80-e25f-4049-82fd-a5dff1bb2357.jpg',
         'https://s3.static.brasilescola.uol.com.br/img/2019/12/estadio-maracana-novo.jpg',
-        'https://s3.static.brasilescola.uol.com.br/img/2019/12/estadio-maracana-novo.jpg',
-
-        'https://s3.static.brasilescola.uol.com.br/img/2019/12/estadio-maracana-novo.jpg',
-
-      
       ],
       descricao: 'Descrição do evento 2',
       dimensoes: '100x60 metros',
@@ -47,51 +46,37 @@ const AlbumPartilha = () => {
   const [showPublicationList, setShowPublicationList] = useState(true);
   const [selectedButton, setSelectedButton] = useState('list');
   const [searchTerm, setSearchTerm] = useState('');
-
-  const [nome, setNome] = useState('');
-  const [topico, setTopico] = useState('');
-  const [imagem, setImagem] = useState('default-image-url');
-
   const [editandoPublicacao, setEditandoPublicacao] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [publicacaoIdParaExcluir, setPublicacaoIdParaExcluir] = useState(null);
-
-  const [detalhesModalIsOpen, setDetalhesModalIsOpen] = useState(false);
   const [publicacaoDetalhada, setPublicacaoDetalhada] = useState(null);
 
-  const openDetalhesModal = (publicacao) => {
+  const openDetalhes = (publicacao) => {
     setPublicacaoDetalhada(publicacao);
-    setDetalhesModalIsOpen(true);
-  }
+    setShowPublicationList(false);
+    setShowCreateForm(false);
+  };
 
-  const closeDetalhesModal = () => {
-    setDetalhesModalIsOpen(false);
+  const closeDetalhes = () => {
     setPublicacaoDetalhada(null);
-  }
-
-  const openModal = (publicacaoId) => {
-    setIsOpen(true);
-    setPublicacaoIdParaExcluir(publicacaoId);
-  }
-
-  const closeModal = () => {
-    setIsOpen(false);
-    setPublicacaoIdParaExcluir(null);
-  }
+    setShowPublicationList(true);
+  };
 
   const handleDeleteClick = (publicacaoId) => {
-    openModal(publicacaoId);
+    setIsOpen(true);
+    setPublicacaoIdParaExcluir(publicacaoId);
   };
 
   const handleConfirmDelete = async () => {
     if (publicacaoIdParaExcluir) {
       try {
+        setPublicacoes(prev => prev.filter(pub => pub.id !== publicacaoIdParaExcluir));
         console.log(`Publicação ${publicacaoIdParaExcluir} excluída com sucesso.`);
-        setPublicacoes(prevPublicacoes => prevPublicacoes.filter(publicacao => publicacao.id !== publicacaoIdParaExcluir));
       } catch (error) {
         console.error('Erro ao excluir publicação:', error);
       } finally {
-        closeModal(); 
+        setIsOpen(false);
+        setPublicacaoIdParaExcluir(null);
       }
     }
   };
@@ -101,53 +86,13 @@ const AlbumPartilha = () => {
     setShowPublicationList(false);
     setSelectedButton('create');
     setEditandoPublicacao(null);
-    resetForm();
   };
 
   const handleShowPublicationListClick = () => {
     setShowCreateForm(false);
     setShowPublicationList(true);
     setSelectedButton('list');
-  };
-
-  const resetForm = () => {
-    setNome('');
-    setTopico('');
-    setImagem('default-image-url');
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!nome || !topico) {
-      alert('Por favor, preencha todos os campos.');
-      return;
-    }
-    try {
-      if (editandoPublicacao) {
-        const publicacoesAtualizadas = publicacoes.map(publicacao => 
-          publicacao.id === editandoPublicacao.id ? { ...publicacao, nome, topico, imagem } : publicacao
-        );
-        setPublicacoes(publicacoesAtualizadas);
-        console.log('Publicação atualizada com sucesso.');
-      } else {
-        const novaPublicacao = {
-          id: publicacoes.length + 1,
-          nome,
-          topico,
-          dataCriacao: new Date().toISOString(),
-          status: 'active',
-          imagens: [imagem]
-        };
-        setPublicacoes([...publicacoes, novaPublicacao]);
-        console.log('Publicação criada com sucesso.');
-      }
-      setShowCreateForm(false);
-      setShowPublicationList(true);
-      resetForm();
-    } catch (error) {
-      console.error('Erro ao criar/atualizar publicação:', error);
-      alert('Erro ao criar/atualizar publicação.');
-    }
+    setPublicacaoDetalhada(null);
   };
 
   const handleEditClick = (publicacao) => {
@@ -155,25 +100,58 @@ const AlbumPartilha = () => {
     setShowPublicationList(false);
     setSelectedButton('edit');
     setEditandoPublicacao(publicacao);
-    setNome(publicacao.nome);
-    setTopico(publicacao.topico);
-    setImagem(publicacao.imagens[0] || 'default-image-url');
+  };
+
+ const handleFormSubmit = (formData) => {
+  const { titulo, topico, area, descricao, images } = formData;
+
+  if (!titulo || !topico) {
+    alert('Por favor, preencha todos os campos.');
+    return;
+  }
+
+  try {
+    if (editandoPublicacao) {
+      setPublicacoes(prev => 
+        prev.map(pub => pub.id === editandoPublicacao.id ? { ...pub, nome: titulo, topico, area, descricao, imagens: images } : pub)
+      );
+      console.log('Publicação atualizada com sucesso.');
+    } else {
+      const novaPublicacao = {
+        id: publicacoes.length + 1,
+        nome: titulo,
+        topico,
+        area,
+        descricao,
+        dataCriacao: new Date().toISOString(),
+        status: 'active',
+        imagens: images.length > 0 ? images : ['default-image-url']
+      };
+      setPublicacoes(prev => [...prev, novaPublicacao]);
+      console.log('Publicação criada com sucesso.');
+    }
+    setShowCreateForm(false);
+    setShowPublicationList(true);
+  } catch (error) {
+    console.error('Erro ao criar/atualizar publicação:', error);
+    alert('Erro ao criar/atualizar publicação.');
+  }
+};
+
+  const handleCancelForm = () => {
+    setShowCreateForm(false);
+    setShowPublicationList(true);
+    setSelectedButton('list');
   };
 
   const filterPublicationsByStatus = (status) => {
-    switch (status) {
-      case 'active':
-        return publicacoes.filter(publicacao => publicacao.status === 'active');
-      case 'reported':
-        return publicacoes.filter(publicacao => publicacao.status === 'reported');
-      case 'inactive':
-        return publicacoes.filter(publicacao => publicacao.status === 'inactive');
-      default:
-        return publicacoes;
-    }
+    return publicacoes.filter(pub => status === 'list' || pub.status === status);
   };
 
-  const renderPublications = (filteredPublications) => (
+  const filteredPublications = filterPublicationsByStatus(selectedButton)
+    .filter(pub => pub.nome.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  const renderPublications = (publications) => (
     <table className="publications-table">
       <thead>
         <tr>
@@ -186,22 +164,22 @@ const AlbumPartilha = () => {
         </tr>
       </thead>
       <tbody>
-        {filteredPublications.map((publicacao, index) => (
+        {publications.map((publicacao, index) => (
           <tr key={publicacao.id}>
             <td>{index + 1}</td>
             <td>{publicacao.nome}</td>
             <td>{publicacao.topico}</td>
             <td>{formatarData(publicacao.dataCriacao)}</td>
             <td>
-              <span className={`status-badge ${publicacao.status === 'active' ? 'status-active' : 'status-inactive'}`}>
-                {publicacao.status === 'active' ? 'Active' : 'Inactive'}
+              <span className={`status-badge ${publicacao.status}`}>
+                {publicacao.status === 'active' ? 'Ativo' : 'Oculto'}
               </span>
             </td>
             <td>
-              <FaInfoCircle className="info-icon" onClick={() => openDetalhesModal(publicacao)} />
-              <FaBan className="ban-icon" />
-              <FaPen className="edit-icon" onClick={() => handleEditClick(publicacao)} />
-              <FaTrashAlt className="delete-icon" onClick={() => handleDeleteClick(publicacao.id)} />
+              <FaInfoCircle className="info-icon clickable-icon" onClick={() => openDetalhes(publicacao)} />
+              <FaBan className="ban-icon clickable-icon" />
+              <FaPen className="edit-icon clickable-icon" onClick={() => handleEditClick(publicacao)} />
+              <FaTrashAlt className="delete-icon clickable-icon" onClick={() => handleDeleteClick(publicacao.id)} />
             </td>
           </tr>
         ))}
@@ -209,101 +187,54 @@ const AlbumPartilha = () => {
     </table>
   );
 
-  const filteredPublications = filterPublicationsByStatus(selectedButton).filter(publicacao =>
-    publicacao.nome.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const formatarData = (data) => {
-    const date = new Date(data);
-    return date.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+  const formatarData = (dataISO) => {
+    const data = new Date(dataISO);
+    const dia = data.getDate().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear();
+    const horas = data.getHours().toString().padStart(2, '0');
+    const minutos = data.getMinutes().toString().padStart(2, '0');
+    return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
   };
 
   return (
     <div className="div_princ">
-      <h1 className="title2">Lista de Publicações</h1>
-      <div className="button-container">
-        <CreatePublicationButton
-          onClick={handleShowPublicationListClick}
-          iconSrc="https://i.ibb.co/P4nsk4w/Icon-criar.png"
-          iconBgColor="#e0f7fa"
-          title="Publicações Totais"
-          subtitle={publicacoes.length.toString()}
-          isSelected={selectedButton === 'list'}
-        />
-        <CreatePublicationButton
-          iconSrc="https://i.ibb.co.png"
-          iconBgColor="#FFE0EB"
-          title="Ativas"
-          subtitle={filterPublicationsByStatus('active').length.toString()}
-          isSelected={selectedButton === 'active'}
-          onClick={() => setSelectedButton('active')}
-        />
-         <CreatePublicationButton
-          iconSrc="https://i.ibb.co.png"
-          iconBgColor="#FFE0EB"
-          title="Inativas"
-          subtitle={filterPublicationsByStatus('inactive').length.toString()}
-          isSelected={selectedButton === 'inactive'}
-          onClick={() => setSelectedButton('inactive')}
-        />
-        <CreatePublicationButton
-          iconSrc="https://i.ibb.co/RPC7vW8.png"
-          iconBgColor="#FFE0EB"
-          title="Denunciadas"
-          subtitle={filterPublicationsByStatus('reported').length.toString()}
-          isSelected={selectedButton === 'reported'}
-          onClick={() => setSelectedButton('reported')}
-        />
-        <CreatePublicationButton
-          onClick={handleCreatePublicationClick}
-          iconSrc="https://i.ibb.co/P4nsk4w/Icon-criar.png"
-          iconBgColor="#e0f7fa"
-          title="Criar Publicação"
-          subtitle="Criar..."
-          isSelected={selectedButton === 'create'}
-        />
-      </div>
+      {!showCreateForm && !publicacaoDetalhada && (
+        <>
+          <h1 className="title2">Lista de Publicações</h1>
 
-      <div className="search-bar">
-        <FaMagnifyingGlass className="search-icon" />
-        <input
-          type="text"
-          placeholder="Procurar por Publicação..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+          <FilterOptions
+            selectedButton={selectedButton}
+            setSelectedButton={setSelectedButton}
+            filterPublicationsByStatus={filterPublicationsByStatus}
+            publicacoes={publicacoes}
+            handleShowPublicationListClick={handleShowPublicationListClick}
+            handleCreatePublicationClick={handleCreatePublicationClick}
+          />
+
+          <div className="search-bar">
+            <FaMagnifyingGlass className="search-icon" />
+            <input
+              type="text"
+              placeholder="Procurar por Publicação..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </>
+      )}
 
       {showCreateForm && (
-        <div className="form-container">
-          <h2>{editandoPublicacao ? 'Editar Publicação' : 'Criar Publicação'}</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-left">
-              <label>
-                Nome:
-                <input type="text" name="nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-              </label>
-              <label>
-                Tópico:
-                <input type="text" name="topico" value={topico} onChange={(e) => setTopico(e.target.value)} />
-              </label>
-              <label>
-                Imagem:
-                <input type="text" name="imagem" value={imagem} onChange={(e) => setImagem(e.target.value)} />
-              </label>
-            </div>
-            <button type="submit">{editandoPublicacao ? 'Atualizar' : 'Criar'}</button>
-          </form>
-        </div>
+        <CriarAlbum
+          onSubmit={handleFormSubmit}
+          onCancel={handleCancelForm}
+          publicacao={editandoPublicacao}
+        />
       )}
 
       {showPublicationList && (
         <div className="publications-view">
-          {publicacoes.length === 0 ? (
+          {filteredPublications.length === 0 ? (
             <div className='empty-message'>Nenhuma publicação disponível.</div>
           ) : (
             renderPublications(filteredPublications)
@@ -311,59 +242,15 @@ const AlbumPartilha = () => {
         </div>
       )}
 
-      {/* Modal para confirmar exclusão */}
-      <Modal
+      {publicacaoDetalhada && (
+        <PublicacaoDetalhes publicacao={publicacaoDetalhada} onClose={closeDetalhes} />
+      )}
+
+      <DeleteModal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Eliminar Partilha"
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <div className="modal-content">
-          <div className="modal-icon">
-            <FaTrashAlt /> 
-          </div>
-          <h2>Eliminar partilha?</h2>
-          <p>O user que criou esta partilha será notificado sobre sua ação</p>
-          <div className="modal-buttons">
-            <button onClick={handleConfirmDelete}>Eliminar</button>
-            <button onClick={closeModal}>Cancelar</button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal
-  isOpen={detalhesModalIsOpen}
-  onRequestClose={closeDetalhesModal}
-  contentLabel="Detalhes da Publicação"
-  className="modal-detalhes"
-  overlayClassName="overlay-detalhes"
->
-  {publicacaoDetalhada && (
-    <div className="modal-detalhes-content">
-      <h2>{publicacaoDetalhada.nome}</h2>
-      <div className="galeria">
-        {publicacaoDetalhada.imagens.map((imagem, index) => (
-          <img
-            key={index}
-            src={imagem}
-            alt={`Imagem ${index + 1}`}
-            className="publicacao-detalhes-imagem"
-          />
-        ))}
-      </div>
-      <div className="descricao">
-        <p><strong>Descrição do Local:</strong> {publicacaoDetalhada.descricao}</p>
-        <br></br>
-        <p><strong>Horário:</strong> {publicacaoDetalhada.horario}</p>
-      </div>
-      <div className="modal-detalhes-buttons">
-        <button onClick={closeDetalhesModal}>Fechar</button>
-      </div>
-    </div>
-  )}
-</Modal>
-
+        onRequestClose={() => setIsOpen(false)}
+        onConfirmDelete={handleConfirmDelete}
+      />
     </div>
   );
 };
